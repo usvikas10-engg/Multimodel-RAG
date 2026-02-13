@@ -24,32 +24,34 @@ https://rag-with-multimodality.streamlit.app/
 
 ## Key Features
 
-- Text-based RAG over uploaded TXT and PDF files  
-- Multimodal RAG support with image understanding  
+- Text-based RAG over one or many uploaded TXT/PDF files  
+- Multimodal RAG support with one or many images  
 - Vision-based image captioning using:
 
   `meta-llama/llama-4-scout-17b-16e-instruct`
 
 - Embedding generation using Jina Embeddings v4 API  
 - Vector similarity retrieval with FAISS  
-- Simple reranking layer for improved relevance  
+- Configurable chunking and retrieval controls (chunk size, overlap, top-k, context-k)  
+- Reranking with source diagnostics (distance + lexical score)  
 - Guardrails to reduce hallucinations (context-only answering)  
 - Session memory with recent chat history  
 - Latency tracking displayed in the UI  
 - Metadata filtering (retrieve text-only, image-only, or both)
+- Downloadable chat history export
 
 ---
 
 ## Architecture Overview
 
-1. User uploads a document (TXT/PDF)
-2. Text is chunked with overlap for better retrieval
-3. User optionally uploads an image
-4. Image is converted into semantic text using Groq Vision
-5. All chunks are embedded using Jina Embeddings v4
-6. FAISS retrieves the most relevant context
-7. Retrieved chunks are reranked
-8. Groq LLM generates an answer grounded in retrieved context
+1. User uploads one or more documents/images
+2. Content is converted into text chunks with configurable overlap
+3. Image files are converted into semantic descriptions using Groq Vision
+4. All chunks are embedded using Jina Embeddings v4
+5. FAISS retrieves relevant chunks with optional type filtering
+6. Chunks are reranked and assembled into grounded context
+7. Groq LLM generates an answer grounded in retrieved context
+8. UI displays diagnostics and supports chat history export
 
 ---
 
