@@ -8,15 +8,25 @@ class FAISSRetriever:
         self.metadata = metadata
 
     def search(self, query_embedding, top_k=5, filter_type=None):
-        _, indices = self.index.search(query_embedding, top_k)
+        distances, indices = self.index.search(query_embedding, top_k)
 
         results = []
-        for idx in indices[0]:
+        for rank, idx in enumerate(indices[0]):
+            if idx < 0:
+                continue
+
             meta = self.metadata[idx]
 
             if filter_type and meta["type"] != filter_type:
                 continue
 
-            results.append(idx)
+            results.append(
+                {
+                    "id": int(idx),
+                    "score": float(distances[0][rank]),
+                    "metadata": meta
+                }
+            )
 
         return results
+        
